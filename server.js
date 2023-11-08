@@ -30,6 +30,9 @@ io.on("connection", (socket) => {
       players[id] = new Player(1000, playerName);
       console.log("pl " + JSON.stringify(players));
       io.emit("message", `${playerName} has joined the game.`);
+      if (Object.keys(players).length == 2) {
+        startGame();
+      }
     } else {
       socket.emit("message", "The game is full.");
     }
@@ -46,6 +49,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("startGame", () => {
+    startGame();
+  });
+
+  function startGame() {
     console.log("sg");
 
     if (Object.values(players).length === 2) {
@@ -60,7 +67,7 @@ io.on("connection", (socket) => {
     let gameState = game.gameState;
     gameState["players"] = players;
     io.emit("gameState", game.gameState);
-  });
+  }
 
   socket.on("showdown", () => {
     console.log("showdown");
@@ -95,9 +102,6 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User disconnected: " + socket.id);
-    // let gameState = game.gameState;
-    // gameState["players"] = players;
-    // io.emit("gameState", game.gameState);
     io.emit("message", "A player has left the game.");
   });
 });

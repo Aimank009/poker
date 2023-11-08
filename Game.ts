@@ -178,15 +178,15 @@ export default class Game {
     }
     switch (action) {
       case "bet":
-        this.gameState.currentPlayer.bet(amount!);
+        if (this.gameState.currentRoundBet == 0) {
+          this.gameState.currentPlayer.bet(amount!);
+        } else {
+          this.gameState.currentPlayer.raise(amount!);
+        }
         this.gameState.currentRoundBet =
           this.gameState.currentPlayer.currentBet;
         break;
-      case "raise":
-        this.gameState.currentPlayer.raise(amount!);
-        this.gameState.currentRoundBet =
-          this.gameState.currentPlayer.currentBet;
-        break;
+
       case "call":
         const callAmount =
           this.gameState.currentRoundBet -
