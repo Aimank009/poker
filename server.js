@@ -101,11 +101,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    delete players[socket.id];
+    game.removePlayer();
     console.log("User disconnected: " + socket.id);
     io.emit("message", "A player has left the game.");
   });
 });
 
-server.listen(3000, () => {
-  console.log("Server is running on port 3000");
+server.listen(5000, () => {
+  console.log("Server is running on port 5000");
 });

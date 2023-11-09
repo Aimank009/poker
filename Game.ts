@@ -41,6 +41,15 @@ export default class Game {
     };
   }
 
+  leaveGame(playerName: string) {
+    if (this.gameState.player1.name == playerName) {
+      this.gameState.player1 == null;
+    } else if (this.gameState.player2.name == playerName) {
+      this.gameState.player2 == null;
+    }
+    this.newGame();
+  }
+
   newGame(): void {
     this.gameState.communityCards = [];
     this.gameState.pot = 0;
