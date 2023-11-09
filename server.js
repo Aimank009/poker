@@ -24,6 +24,7 @@ io.on("connection", (socket) => {
   console.log("A user connected: " + socket.id);
 
   socket.on("joinGame", (playerName) => {
+    console.log(`${playerName} has joined game`);
     if (Object.keys(players).length < 2) {
       let id = socket.id;
       console.log("id " + id);
@@ -101,8 +102,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    game.leaveGame(players[socket.id].name);
     delete players[socket.id];
-    game.removePlayer();
     console.log("User disconnected: " + socket.id);
     io.emit("message", "A player has left the game.");
   });

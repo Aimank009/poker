@@ -28,6 +28,15 @@ class Game {
             gameStage: GameStage.PreFlop,
         };
     }
+    leaveGame(playerName) {
+        if (this.gameState.player1.name == playerName) {
+            this.gameState.player1 == null;
+        }
+        else if (this.gameState.player2.name == playerName) {
+            this.gameState.player2 == null;
+        }
+        this.newGame();
+    }
     newGame() {
         this.gameState.communityCards = [];
         this.gameState.pot = 0;
@@ -132,12 +141,12 @@ class Game {
         }
         switch (action) {
             case "bet":
-                this.gameState.currentPlayer.bet(amount);
-                this.gameState.currentRoundBet =
-                    this.gameState.currentPlayer.currentBet;
-                break;
-            case "raise":
-                this.gameState.currentPlayer.raise(amount);
+                if (this.gameState.currentRoundBet == 0) {
+                    this.gameState.currentPlayer.bet(amount);
+                }
+                else {
+                    this.gameState.currentPlayer.raise(amount);
+                }
                 this.gameState.currentRoundBet =
                     this.gameState.currentPlayer.currentBet;
                 break;
