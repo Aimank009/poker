@@ -14,10 +14,34 @@ export type Value =
   | "K"
   | "A";
 
+function actualValueOf(value: Value): number {
+  const values: Record<Value, number> = {
+    "2": 1,
+    "3": 2,
+    "4": 3,
+    "5": 4,
+    "6": 5,
+    "7": 6,
+    "8": 7,
+    "9": 8,
+    "10": 9,
+    J: 10,
+    Q: 11,
+    K: 12,
+    A: 13,
+  };
+
+  return values[value];
+}
+
 export default class Card {
-  constructor(public suit: Suit, public value: Value) {}
+  constructor(
+    public suit: Suit,
+    public cardFace: Value,
+    public value: string = actualValueOf(cardFace).toString()
+  ) {}
 
   toString(): string {
-    return `${this.value}${this.suit.charAt(0).toLowerCase()}`;
+    return `${this.cardFace}${this.suit.charAt(0).toLowerCase()}`;
   }
 }

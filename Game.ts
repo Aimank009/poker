@@ -24,6 +24,7 @@ export default class Game {
     winner: Nullable<Player>;
     winDesc: string;
     gameStage: string;
+    gamePlayers: Player[];
   };
 
   constructor(player1: Player, player2: Player) {
@@ -38,6 +39,7 @@ export default class Game {
       winner: null,
       winDesc: "",
       gameStage: GameStage.PreFlop,
+      gamePlayers: [player1, player2],
     };
   }
 
@@ -188,7 +190,7 @@ export default class Game {
     switch (action) {
       case "bet":
         if (this.gameState.currentRoundBet == 0) {
-          this.gameState.currentPlayer.bet(amount!);
+          this.gameState.currentPlayer.betAmount(amount!);
         } else {
           this.gameState.currentPlayer.raise(amount!);
         }

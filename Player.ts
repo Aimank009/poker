@@ -5,6 +5,24 @@ export default class Player {
   hand: string[] = [];
   stack: number;
   currentBet: number = 0;
+  cards: Card[] = [];
+
+  showDownHand: any = {
+    hand: [],
+    descendingSortHand: [],
+  };
+
+  chips: number = 20000;
+  roundStartChips: number = 20000;
+  roundEndChips: number = 20000;
+  currentRoundChipsInvested: number = 0;
+  bet: number = 0;
+  betReconciled: boolean = false;
+  folded: boolean = false;
+  allIn: boolean = false;
+  canRaise: boolean = true;
+  stackInvestment: number = 0;
+  robot: boolean = false;
 
   constructor(initialStack: number, name: string) {
     this.name = name;
@@ -18,14 +36,15 @@ export default class Player {
 
   takeCard(card: Card): void {
     this.hand.push(card.value + card.suit.charAt(0).toLocaleLowerCase());
+    this.cards.push(card);
   }
 
-  bet(amount: number): void {
+  betAmount(amount: number): void {
     if (amount <= 0) {
       throw new Error("Bet amount must be positive.");
     }
     if (amount >= this.stack) {
-      this.allIn();
+      this.playerAllIn();
     } else {
       this.currentBet = amount;
       this.stack -= amount;
@@ -39,7 +58,7 @@ export default class Player {
     }
     const totalBet = this.currentBet + amount;
     if (totalBet >= this.stack) {
-      this.allIn();
+      this.playerAllIn();
     } else {
       this.stack -= amount;
       this.currentBet = totalBet;
@@ -50,7 +69,7 @@ export default class Player {
   call(currentRoundBet: number): void {
     const amountToCall = currentRoundBet - this.currentBet;
     if (amountToCall > this.stack) {
-      this.allIn();
+      this.playerAllIn();
     } else {
       this.currentBet += amountToCall;
       this.stack -= amountToCall;
@@ -65,7 +84,7 @@ export default class Player {
     console.log(this.name + " checks ");
   }
 
-  allIn(): void {
+  playerAllIn(): void {
     this.currentBet += this.stack;
     this.stack = 0;
     console.log(this.name + " goes all in");

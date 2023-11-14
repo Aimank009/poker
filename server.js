@@ -24,6 +24,7 @@ io.on("connection", (socket) => {
   console.log("A user connected: " + socket.id);
 
   socket.on("joinGame", (playerName) => {
+    console.log("jg " + playerName);
     if (playerName == null) return;
     console.log(`${playerName} has joined game`);
 
@@ -77,6 +78,7 @@ io.on("connection", (socket) => {
     }
     let gameState = game.gameState;
     gameState["players"] = players;
+    console.log("gamestate " + JSON.stringify(game.gameState));
     io.emit("gameState", game.gameState);
   }
 

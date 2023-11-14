@@ -5,6 +5,22 @@ class Player {
         this.name = "";
         this.hand = [];
         this.currentBet = 0;
+        this.cards = [];
+        this.showDownHand = {
+            hand: [],
+            descendingSortHand: [],
+        };
+        this.chips = 20000;
+        this.roundStartChips = 20000;
+        this.roundEndChips = 20000;
+        this.currentRoundChipsInvested = 0;
+        this.bet = 0;
+        this.betReconciled = false;
+        this.folded = false;
+        this.allIn = false;
+        this.canRaise = true;
+        this.stackInvestment = 0;
+        this.robot = false;
         this.name = name;
         this.stack = initialStack;
     }
@@ -14,13 +30,14 @@ class Player {
     }
     takeCard(card) {
         this.hand.push(card.value + card.suit.charAt(0).toLocaleLowerCase());
+        this.cards.push(card);
     }
-    bet(amount) {
+    betAmount(amount) {
         if (amount <= 0) {
             throw new Error("Bet amount must be positive.");
         }
         if (amount >= this.stack) {
-            this.allIn();
+            this.playerAllIn();
         }
         else {
             this.currentBet = amount;
@@ -34,7 +51,7 @@ class Player {
         }
         const totalBet = this.currentBet + amount;
         if (totalBet >= this.stack) {
-            this.allIn();
+            this.playerAllIn();
         }
         else {
             this.stack -= amount;
@@ -45,7 +62,7 @@ class Player {
     call(currentRoundBet) {
         const amountToCall = currentRoundBet - this.currentBet;
         if (amountToCall > this.stack) {
-            this.allIn();
+            this.playerAllIn();
         }
         else {
             this.currentBet += amountToCall;
@@ -59,7 +76,7 @@ class Player {
         }
         console.log(this.name + " checks ");
     }
-    allIn() {
+    playerAllIn() {
         this.currentBet += this.stack;
         this.stack = 0;
         console.log(this.name + " goes all in");
