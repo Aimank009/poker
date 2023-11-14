@@ -24,7 +24,11 @@ io.on("connection", (socket) => {
   console.log("A user connected: " + socket.id);
 
   socket.on("joinGame", (playerName) => {
+    if (playerName == null) return;
     console.log(`${playerName} has joined game`);
+
+    if (playerExists(playerName)) return;
+
     if (Object.keys(players).length < 2) {
       let id = socket.id;
       console.log("id " + id);
@@ -38,6 +42,12 @@ io.on("connection", (socket) => {
       socket.emit("message", "The game is full.");
     }
   });
+
+  function playerExists(nameToCheck) {
+    return Object.values(players).some(
+      (nestedObj) => nestedObj.name === nameToCheck
+    );
+  }
 
   socket.on("playerAction", (action) => {
     const playerId = socket.id;
@@ -102,7 +112,34 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    game.leaveGame(players[socket.id].name);
+    console.log("disconnect " + JSON.stringify(players));
+    if (players[socket.id] == null) return;
+    console.log("sock " + socket.id);
+    console.log("play " + JSON.stringify(players[socket.id]));
+    console.log("name " + players[socket.id].name);
+    //game.leaveGame(players[socket.id].name.toString());
+    let gameState = game.gameState;
+    console.log("gamestate " + gameState);
+    if (gameState) {
+      game.leaveGame("0x216F3F71Add8F2C3C9e19fA9b463b6031D5A14b9");
+    }
+    delete players[socket.id];
+    console.log("User disconnected: " + socket.id);
+    io.emit("message", "A player has left the game.");
+  });
+
+  socket.on("leaveGame", () => {
+    console.log("disconnect " + JSON.stringify(players));
+    if (players[socket.id] == null) return;
+    console.log("sock " + socket.id);
+    console.log("play " + JSON.stringify(players[socket.id]));
+    console.log("name " + players[socket.id].name);
+    //game.leaveGame(players[socket.id].name.toString());
+    let gameState = game.gameState;
+    console.log("gamestate " + gameState);
+    if (gameState) {
+      game.leaveGame("0x216F3F71Add8F2C3C9e19fA9b463b6031D5A14b9");
+    }
     delete players[socket.id];
     console.log("User disconnected: " + socket.id);
     io.emit("message", "A player has left the game.");
