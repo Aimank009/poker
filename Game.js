@@ -22,11 +22,13 @@ class Game {
             communityCards: [],
             pot: 0,
             currentPlayer: player1,
+            activePlayerIndex: 0,
             currentRoundBet: 0,
             winner: null,
             winDesc: "",
             gameStage: GameStage.PreFlop,
             gamePlayers: [player1, player2],
+            dealerIndex: 0,
         };
     }
     leaveGame(playerName) {
@@ -51,10 +53,14 @@ class Game {
     }
     dealInitialCards() {
         this.gameState.deck.shuffle();
-        this.gameState.player1.takeCard(this.gameState.deck.draw());
-        this.gameState.player1.takeCard(this.gameState.deck.draw());
-        this.gameState.player2.takeCard(this.gameState.deck.draw());
-        this.gameState.player2.takeCard(this.gameState.deck.draw());
+        if (this.gameState.player1.cards.length == 0) {
+            this.gameState.player1.takeCard(this.gameState.deck.draw());
+            this.gameState.player1.takeCard(this.gameState.deck.draw());
+        }
+        if (this.gameState.player2.cards.length == 0) {
+            this.gameState.player2.takeCard(this.gameState.deck.draw());
+            this.gameState.player2.takeCard(this.gameState.deck.draw());
+        }
         this.gameState.currentRoundBet = 0;
         console.log(this.gameState.player1.name +
             " hands " +
@@ -124,6 +130,8 @@ class Game {
             this.gameState.currentPlayer === this.gameState.player1
                 ? this.gameState.player2
                 : this.gameState.player1;
+        this.gameState.activePlayerIndex =
+            this.gameState.activePlayerIndex === 0 ? 1 : 0;
     }
     collectBets() {
         console.log("collectBets Pl1 " +

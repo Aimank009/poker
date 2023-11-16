@@ -70,10 +70,14 @@ export default class Game {
 
   dealInitialCards(): void {
     this.gameState.deck.shuffle();
-    this.gameState.player1.takeCard(this.gameState.deck.draw()!);
-    this.gameState.player1.takeCard(this.gameState.deck.draw()!);
-    this.gameState.player2.takeCard(this.gameState.deck.draw()!);
-    this.gameState.player2.takeCard(this.gameState.deck.draw()!);
+    if (this.gameState.player1.cards.length == 0) {
+      this.gameState.player1.takeCard(this.gameState.deck.draw()!);
+      this.gameState.player1.takeCard(this.gameState.deck.draw()!);
+    }
+    if (this.gameState.player2.cards.length == 0) {
+      this.gameState.player2.takeCard(this.gameState.deck.draw()!);
+      this.gameState.player2.takeCard(this.gameState.deck.draw()!);
+    }
     this.gameState.currentRoundBet = 0;
     console.log(
       this.gameState.player1.name +
