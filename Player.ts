@@ -35,7 +35,7 @@ export default class Player {
   }
 
   takeCard(card: Card): void {
-    this.hand.push(card.value + card.suit.charAt(0).toLocaleLowerCase());
+    this.hand.push(card.cardFace + card.suit.charAt(0).toLocaleLowerCase());
     this.cards.push(card);
   }
 

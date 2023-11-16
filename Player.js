@@ -29,7 +29,7 @@ class Player {
         this.currentBet = 0;
     }
     takeCard(card) {
-        this.hand.push(card.value + card.suit.charAt(0).toLocaleLowerCase());
+        this.hand.push(card.cardFace + card.suit.charAt(0).toLocaleLowerCase());
         this.cards.push(card);
     }
     betAmount(amount) {

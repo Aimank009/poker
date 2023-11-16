@@ -20,11 +20,13 @@ export default class Game {
     communityCards: string[];
     pot: number;
     currentPlayer: Player;
+    activePlayerIndex: number;
     currentRoundBet: number;
     winner: Nullable<Player>;
     winDesc: string;
     gameStage: string;
     gamePlayers: Player[];
+    dealerIndex: number;
   };
 
   constructor(player1: Player, player2: Player) {
@@ -35,11 +37,13 @@ export default class Game {
       communityCards: [],
       pot: 0,
       currentPlayer: player1,
+      activePlayerIndex: 0,
       currentRoundBet: 0,
       winner: null,
       winDesc: "",
       gameStage: GameStage.PreFlop,
       gamePlayers: [player1, player2],
+      dealerIndex: 0,
     };
   }
 
@@ -163,6 +167,9 @@ export default class Game {
       this.gameState.currentPlayer === this.gameState.player1
         ? this.gameState.player2
         : this.gameState.player1;
+
+    this.gameState.activePlayerIndex =
+      this.gameState.activePlayerIndex === 0 ? 1 : 0;
   }
 
   collectBets(): void {
